@@ -1,0 +1,10 @@
+FROM node:latest
+
+#COPY package.json ./
+#COPY package-lock.json ./
+#COPY ./memory-game-two/package.json /app/package.json
+COPY memory-game-two/package.json /app/package.json
+WORKDIR /app
+#WORKDIR /app/memory-game-two
+#RUN npm create vite@latest
+#CMD ["npm", "run", "dev"]

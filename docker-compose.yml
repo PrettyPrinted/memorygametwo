@@ -1,0 +1,17 @@
+services:
+  app:
+    build: .
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./memory-game-two:/app
+    command: npm run dev -- --host
+  backend:
+    build: .
+    volumes:
+      - ./memory-game-two:/app
+    ports:
+      - "5001:5001"
+    command: node index.js
+    #environment:
+    #  - DEBUG=express:*
