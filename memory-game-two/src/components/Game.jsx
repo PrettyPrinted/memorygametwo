@@ -6,7 +6,7 @@ import MultiPlayerReducer from './MultiPlayerReducer';
 class Game extends Component {
     render() {
         return (
-            <div className="app-game">{this.props.isMultiPlayer ? <MultiPlayerReducer {...this.props} /> : <SinglePlayer {...this.props} />}</div>
+            <div className="app-game">{this.props.isMultiPlayer ? <MultiPlayer {...this.props} /> : <SinglePlayer {...this.props} />}</div>
         );
     }
 }

@@ -3,7 +3,36 @@ import PropTypes from 'prop-types';
 import Difficulties from '../constants/Difficulties';
 import { requestMembers, getMembers, requestRoomStatuses, getRoomsStatuses } from '../socket';
 
+function roomStateReducer(roomsState, action) {
+    // each action is a callback from socket
+    switch (action.type) {
+        case "getMembers": {
+            return {
+                ...roomsState,
+                members: action.data
+            }
+        }
+        case "getRoomStatuses": {
+            return {
+                ...roomsState,
+                roomStatuses: action.roomStatuses
+            }
+        }
+        case "toggleGameType": {
+            return {
+                ...roomsState,
+                gameType: !roomsState.gameType
+            }
+        }
+
 class Rooms extends Component {
+
+    const [roomsState, dispatch] = useReducer(roomStateReducer, {
+        gameType: false,
+        members: new Array(12).fill(0),
+        roomStatuses: new Array(12).fill(true)
+    })
+
     constructor(props) {
         super(props);
 
@@ -21,25 +50,30 @@ class Rooms extends Component {
         this.props.fetchRooms();
     }
 
-    componentDidMount() {
+    useEffect(() => {
         requestMembers();
-        getMembers(data => this.setState({ members: data }));
+        getMembers(data => {
+            //this.setState({ members: data })
+            dispatch({type: "getMembers", data: data})
+        });
 
         requestRoomStatuses();
         getRoomsStatuses(roomStatuses => {
-            this.setState({ roomStatuses: roomStatuses });
+            //this.setState({ roomStatuses: roomStatuses });
+            dispatch({type: "getRoomStatues", roomStatuses: roomStatuses})
         });
-    }
+    }, [])
 
     toggleGameType() {
         this.setState({ gameType: !this.state.gameType })
+        dispatch({action: "toggleGameType"})
     }
 
     startGame(room) {
-        if (!this.state.gameType || (
-                room.members != this.state.members[room.id].length && this.state.roomStatuses[room.id]
+        if (!roomsState.gameType || (
+                room.members != roomsState.members[room.id].length && roomsState.roomStatuses[room.id]
             )) {
-            this.props.startGame(room, this.state.gameType);
+            props.startGame(room, roomsState.gameType);
         }
     }
 

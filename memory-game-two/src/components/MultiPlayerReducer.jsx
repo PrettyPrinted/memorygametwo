@@ -120,9 +120,6 @@ function gameStateReducer(gameState, action) {
 
             /* start if all members arrived */
             let started = gameState.started;
-            console.log("started")
-            console.log(action.data[action.gameRoom.id].length)
-            console.log(action.gameRoom.members)
             if (action.data[action.gameRoom.id].length === action.gameRoom.members) {
                 started = true;
             }
